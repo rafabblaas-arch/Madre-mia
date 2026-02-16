@@ -12,8 +12,7 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Segoe UI, sans-serif;
-scroll-behavior:smooth;
+font-family: 'Segoe UI', sans-serif;
 }
 
 body{
@@ -25,55 +24,26 @@ padding-bottom:120px;
 /* HEADER */
 header{
 text-align:center;
-padding:25px 10px 10px 10px;
+padding:25px;
 font-size:28px;
 font-weight:bold;
 }
 
 .delivery-time{
 text-align:center;
-margin-bottom:15px;
 color:#ff4d4d;
-}
-
-/* CATEGORIAS */
-.categories{
-display:flex;
-overflow-x:auto;
-gap:10px;
-padding:10px;
-}
-
-.categories button{
-background:#1b1b1b;
-color:#fff;
-border:none;
-padding:10px 18px;
-border-radius:20px;
-cursor:pointer;
-white-space:nowrap;
-transition:0.2s;
-}
-
-.categories button:hover{
-background:#ff0000;
-}
-
-/* TITULO CATEGORIA */
-.section-title{
-margin:25px 20px 10px;
-font-size:20px;
-color:#ff4d4d;
+margin-bottom:20px;
+font-weight:600;
 }
 
 /* CARD */
 .card{
 background:#1b1b1b;
 border-radius:18px;
-margin:15px 20px;
+margin:20px;
 overflow:hidden;
 box-shadow:0 10px 25px rgba(0,0,0,0.6);
-transition:0.2s;
+transition:0.3s;
 }
 
 .card:hover{
@@ -90,11 +60,16 @@ object-fit:cover;
 padding:15px;
 }
 
+.card h2{
+font-size:20px;
+margin-bottom:8px;
+}
+
 .price{
 font-size:22px;
 font-weight:bold;
-color:#ff4d4d;
-margin:10px 0;
+color:#ff4444;
+margin-bottom:12px;
 }
 
 button.add{
@@ -103,9 +78,35 @@ padding:14px;
 border:none;
 border-radius:12px;
 background:linear-gradient(90deg,#ff0000,#ff3c3c);
-color:white;
+color:#fff;
+font-weight:bold;
 font-size:16px;
-font-weight:600;
+cursor:pointer;
+transition:0.2s;
+}
+
+button.add:hover{
+opacity:0.9;
+}
+
+/* CARRINHO */
+.cart-items{
+padding:20px;
+}
+
+.cart-items div{
+display:flex;
+justify-content:space-between;
+margin-bottom:8px;
+font-size:14px;
+}
+
+.remove{
+background:red;
+color:white;
+border:none;
+border-radius:6px;
+padding:3px 8px;
 cursor:pointer;
 }
 
@@ -115,7 +116,7 @@ position:fixed;
 bottom:0;
 left:0;
 width:100%;
-background:#141414;
+background:#111;
 padding:15px;
 display:flex;
 justify-content:space-between;
@@ -135,77 +136,98 @@ cursor:pointer;
 
 </style>
 </head>
-
 <body>
 
 <header>Madre Mia</header>
 <div class="delivery-time">⏱ Entrega estimada: 35–50 minutos</div>
 
-<div class="categories">
-<button onclick="scrollToSection('lanches')">Lanches</button>
-<button onclick="scrollToSection('especiais')">Especiais</button>
-<button onclick="scrollToSection('doces')">Doces</button>
-<button onclick="scrollToSection('drinks')">Drinks</button>
-</div>
-
-<div id="lanches">
-<div class="section-title">Lanches</div>
+<!-- PRODUTOS -->
 
 <div class="card">
 <img src="https://picsum.photos/500/300?1">
 <div class="card-content">
 <h2>Papas de la Puta Madre</h2>
 <div class="price">R$ 32.00</div>
-<button class="add" onclick="addToCart(32)">Adicionar 🛒</button>
+<button class="add" onclick="addToCart('Papas de la Puta Madre',32)">Adicionar</button>
 </div>
 </div>
-
-</div>
-
-<div id="especiais">
-<div class="section-title">Especiais</div>
 
 <div class="card">
 <img src="https://picsum.photos/500/300?2">
 <div class="card-content">
 <h2>Jambalaya</h2>
 <div class="price">R$ 96.00</div>
-<button class="add" onclick="addToCart(96)">Adicionar 🛒</button>
+<button class="add" onclick="addToCart('Jambalaya',96)">Adicionar</button>
 </div>
 </div>
-
-</div>
-
-<div id="doces">
-<div class="section-title">Doces</div>
 
 <div class="card">
 <img src="https://picsum.photos/500/300?3">
 <div class="card-content">
 <h2>Churros</h2>
 <div class="price">R$ 24.00</div>
-<button class="add" onclick="addToCart(24)">Adicionar 🛒</button>
+<button class="add" onclick="addToCart('Churros',24)">Adicionar</button>
 </div>
 </div>
 
-</div>
+<!-- CARRINHO -->
+<div class="cart-items" id="cart-items"></div>
 
+<!-- BARRA FIXA -->
 <div class="cart-bar">
 <div>Total: R$ <span id="total">0.00</span></div>
-<button class="checkout-btn">Finalizar Pedido</button>
+<button class="checkout-btn" onclick="checkout()">Finalizar Pedido</button>
 </div>
 
 <script>
 
+let cart = [];
 let total = 0;
 
-function addToCart(price){
+function addToCart(name, price){
+cart.push({name, price});
 total += price;
-document.getElementById("total").innerText = total.toFixed(2);
+updateCart();
 }
 
-function scrollToSection(id){
-document.getElementById(id).scrollIntoView();
+function removeItem(index){
+total -= cart[index].price;
+cart.splice(index,1);
+updateCart();
+}
+
+function updateCart(){
+document.getElementById("total").innerText = total.toFixed(2);
+
+let cartItems = document.getElementById("cart-items");
+cartItems.innerHTML = "";
+
+cart.forEach((item,index)=>{
+cartItems.innerHTML += `
+<div>
+<span>${item.name} - R$ ${item.price.toFixed(2)}</span>
+<button class="remove" onclick="removeItem(${index})">X</button>
+</div>
+`;
+});
+}
+
+function checkout(){
+if(cart.length === 0){
+alert("Adicione pelo menos um item.");
+return;
+}
+
+let message = "Olá, gostaria de fazer o pedido:%0A%0A";
+
+cart.forEach(item=>{
+message += `${item.name} - R$ ${item.price.toFixed(2)}%0A`;
+});
+
+message += `%0ATotal: R$ ${total.toFixed(2)}`;
+
+let phone = "555533303407"; // COLOQUE O NÚMERO REAL
+window.open(`https://wa.me/${phone}?text=${message}`);
 }
 
 </script>
