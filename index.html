@@ -6,128 +6,62 @@
 <title>Madre Mia</title>
 
 <style>
-
-/* RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
+body{
+background:#111;
+color:white;
+font-family:Arial;
+padding-bottom:120px;
+margin:0;
 }
 
-body {
-    background: #0f0f0f;
-    color: #fff;
-    padding-bottom: 120px;
+header{
+text-align:center;
+padding:20px;
+font-size:28px;
+font-weight:bold;
 }
 
-/* HEADER */
-header {
-    text-align: center;
-    padding: 30px 20px 10px;
+.card{
+background:#1c1c1c;
+margin:20px;
+border-radius:15px;
+overflow:hidden;
 }
 
-header h1 {
-    font-size: 32px;
-    margin-bottom: 10px;
+.card img{
+width:100%;
+height:200px;
+object-fit:cover;
 }
 
-.delivery {
-    color: #ff4d4d;
-    font-weight: bold;
+.card-content{
+padding:15px;
 }
 
-/* CARD */
-.card {
-    background: #1b1b1b;
-    border-radius: 20px;
-    margin: 20px;
-    overflow: hidden;
-    box-shadow: 0 10px 25px rgba(255,0,0,0.2);
-    transition: 0.3s;
+.price{
+color:#ff4444;
+font-size:22px;
+font-weight:bold;
+margin:10px 0;
 }
 
-.card:hover {
-    transform: scale(1.02);
+button{
+width:100%;
+padding:12px;
+background:#ff0000;
+color:white;
+border:none;
+border-radius:8px;
+font-weight:bold;
 }
 
-.card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.card-content {
-    padding: 20px;
-}
-
-.card h2 {
-    font-size: 22px;
-    margin-bottom: 10px;
-}
-
-.price {
-    color: #ff4d4d;
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: 15px;
-}
-
-button {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(90deg,#ff0000,#ff3c3c);
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-button:hover {
-    opacity: 0.9;
-}
-
-/* CART */
-.cart-bar {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: #1b1b1b;
-    padding: 15px 20px;
-    border-top: 2px solid #ff0000;
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
-}
-
-.cart-top {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
-.cart-items {
-    max-height: 150px;
-    overflow-y: auto;
-    margin-bottom: 10px;
-}
-
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 6px;
-    font-size: 14px;
-}
-
-.remove {
-    color: red;
-    cursor: pointer;
-    margin-left: 10px;
-}
-
-.checkout {
-    background: linear-gradient(90deg,#ff0000,#ff3c3c);
+.cart-bar{
+position:fixed;
+bottom:0;
+width:100%;
+background:#1c1c1c;
+padding:15px;
+border-top:2px solid red;
 }
 
 </style>
@@ -135,102 +69,37 @@ button:hover {
 
 <body>
 
-<header>
-    <h1>Madre Mia</h1>
-    <div class="delivery">⏱ Entrega estimada: 35–50 minutos</div>
-</header>
-
-<!-- PRODUTOS -->
+<header>Madre Mia</header>
 
 <div class="card">
-    <img src="https://picsum.photos/500/300?1">
-    <div class="card-content">
-        <h2>Papas de la Puta Madre</h2>
-        <div class="price">R$ 32.00</div>
-        <button onclick="addToCart('Papas de la Puta Madre',32)">Adicionar</button>
-    </div>
+<img src="https://picsum.photos/400/300?1">
+<div class="card-content">
+<h2>Papas</h2>
+<div class="price">R$ 32.00</div>
+<button onclick="addToCart(32)">Adicionar</button>
+</div>
 </div>
 
 <div class="card">
-    <img src="https://picsum.photos/500/300?2">
-    <div class="card-content">
-        <h2>Jambalaya</h2>
-        <div class="price">R$ 96.00</div>
-        <button onclick="addToCart('Jambalaya',96)">Adicionar</button>
-    </div>
+<img src="https://picsum.photos/400/300?2">
+<div class="card-content">
+<h2>Jambalaya</h2>
+<div class="price">R$ 96.00</div>
+<button onclick="addToCart(96)">Adicionar</button>
 </div>
-
-<div class="card">
-    <img src="https://picsum.photos/500/300?3">
-    <div class="card-content">
-        <h2>Churros</h2>
-        <div class="price">R$ 24.00</div>
-        <button onclick="addToCart('Churros',24)">Adicionar</button>
-    </div>
 </div>
-
-<!-- CARRINHO -->
 
 <div class="cart-bar">
-    <div class="cart-top">
-        <div>Total: R$ <span id="total">0.00</span></div>
-    </div>
-
-    <div class="cart-items" id="cart-items"></div>
-
-    <button class="checkout" onclick="checkout()">Finalizar Pedido</button>
+Total: R$ <span id="total">0.00</span>
 </div>
 
 <script>
 
-let cart = [];
 let total = 0;
 
-function addToCart(name, price) {
-    cart.push({ name, price });
-    total += price;
-    updateCart();
-}
-
-function removeItem(index) {
-    total -= cart[index].price;
-    cart.splice(index, 1);
-    updateCart();
-}
-
-function updateCart() {
-    const cartItems = document.getElementById("cart-items");
-    cartItems.innerHTML = "";
-
-    cart.forEach((item, index) => {
-        cartItems.innerHTML += `
-            <div class="cart-item">
-                <span>${item.name} - R$ ${item.price.toFixed(2)}</span>
-                <span class="remove" onclick="removeItem(${index})">X</span>
-            </div>
-        `;
-    });
-
-    document.getElementById("total").innerText = total.toFixed(2);
-}
-
-function checkout() {
-    if (cart.length === 0) {
-        alert("Adicione pelo menos um item.");
-        return;
-    }
-
-    let message = "Olá, gostaria de fazer o seguinte pedido:%0A%0A";
-
-    cart.forEach(item => {
-        message += `• ${item.name} - R$ ${item.price.toFixed(2)}%0A`;
-    });
-
-    message += `%0ATotal: R$ ${total.toFixed(2)}`;
-
-    const phoneNumber = "555533303407";
-
-    window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
+function addToCart(price){
+total += price;
+document.getElementById("total").innerText = total.toFixed(2);
 }
 
 </script>
