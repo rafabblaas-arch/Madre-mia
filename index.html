@@ -1,207 +1,184 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Madre Mia</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-
-body{
-    font-family:'Poppins', sans-serif;
-    background:#111;
-    color:#fff;
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(180deg, #111 0%, #1a1a1a 100%);
+    color: white;
 }
 
-header{
-    padding:25px 20px;
-    text-align:center;
-    background:#1a1a1a;
-    border-bottom:1px solid #222;
+header {
+    text-align: center;
+    padding: 25px;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 1px;
 }
 
-header h1{
-    font-weight:600;
-    font-size:24px;
+.tempo {
+    text-align: center;
+    color: #ff4d4d;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
-.info-bar{
-    background:#1c1c1c;
-    text-align:center;
-    padding:8px;
-    font-size:14px;
-    color:#c62828;
-    font-weight:600;
+.container {
+    padding: 15px;
+    padding-bottom: 120px;
 }
 
-.container{
-    padding:20px;
-    padding-bottom:120px;
+.card {
+    background: #1f1f1f;
+    border-radius: 18px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    transition: transform 0.3s ease;
 }
 
-.product-card{
-    background:#1b1b1b;
-    border-radius:14px;
-    overflow:hidden;
-    margin-bottom:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.4);
+.card:hover {
+    transform: translateY(-5px);
 }
 
-.product-card img{
-    width:100%;
-    height:180px;
-    object-fit:cover;
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
 }
 
-.product-content{
-    padding:15px;
+.card-content {
+    padding: 15px;
 }
 
-.product-content h3{
-    font-size:18px;
-    margin-bottom:5px;
+.badge {
+    background: linear-gradient(45deg, #ff3c3c, #ff6b6b);
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
-.price{
-    font-weight:600;
-    margin-bottom:10px;
+.card h3 {
+    margin: 5px 0;
+    font-size: 20px;
 }
 
-.badge{
-    display:inline-block;
-    background:#c62828;
-    padding:4px 10px;
-    font-size:12px;
-    border-radius:20px;
-    margin-bottom:8px;
+.preco {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #ff4d4d;
 }
 
-.add-btn{
-    background:#c62828;
-    border:none;
-    padding:10px;
-    width:100%;
-    border-radius:8px;
-    color:#fff;
-    font-weight:600;
-    cursor:pointer;
+.botao {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #ff2e2e, #cc0000);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.cart-bar{
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    background:#1a1a1a;
-    padding:15px;
-    border-top:1px solid #222;
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #111;
+    padding: 15px;
+    border-top: 2px solid #ff2e2e;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.cart-bar button{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:10px;
-    background:#c62828;
-    color:#fff;
-    font-weight:600;
-    cursor:pointer;
+.finalizar {
+    background: #ff2e2e;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    font-weight: bold;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>Madre Mia</h1>
-</header>
-
-<div class="info-bar">
-    ⏱ Entrega estimada: 35–50 minutos
-</div>
+<header>Madre Mia</header>
+<div class="tempo">⏱ Entrega estimada: 35–50 minutos</div>
 
 <div class="container" id="menu"></div>
 
-<div class="cart-bar">
+<div class="footer">
     <div>Total: R$ <span id="total">0.00</span></div>
-    <button onclick="checkout()">Finalizar Pedido</button>
+    <button class="finalizar" onclick="finalizar()">Finalizar Pedido</button>
 </div>
 
 <script>
-
 const phoneNumber = "555533303407";
 
 const products = [
-{
-    name:"Papas de la Puta Madre",
-    price:32,
-    destaque:true,
-    image:"https://picsum.photos/400/300?food1"
-},
-{
-    name:"Jambalaya",
-    price:96,
-    destaque:true,
-    image:"https://picsum.photos/400/300?food2"
-},
-{
-    name:"Churros",
-    price:24,
-    destaque:false,
-    image:"https://picsum.photos/400/300?food3"
-}
+    {name:"Papas de la Puta Madre", price:32, img:"https://picsum.photos/500/300?1", destaque:true},
+    {name:"Jambalaya", price:96, img:"https://picsum.photos/500/300?2", destaque:true},
+    {name:"Churros", price:24, img:"https://picsum.photos/500/300?3", destaque:false}
 ];
 
 let cart = [];
 let total = 0;
 
-function renderMenu(){
+function renderMenu() {
     const menu = document.getElementById("menu");
     menu.innerHTML = "";
 
-    products.forEach(p=>{
+    products.forEach(p => {
         menu.innerHTML += `
-            <div class="product-card">
-                <img src="${p.image}">
-                <div class="product-content">
-                    ${p.destaque ? '<span class="badge">🔥 Mais Pedido</span>' : ''}
-                    <h3>${p.name}</h3>
-                    <div class="price">R$ ${p.price.toFixed(2)}</div>
-                    <button class="add-btn" onclick="addToCart('${p.name}', ${p.price})">
-                        Adicionar
-                    </button>
-                </div>
+        <div class="card">
+            <img src="${p.img}">
+            <div class="card-content">
+                ${p.destaque ? '<div class="badge">🔥 Mais Pedido</div>' : ''}
+                <h3>${p.name}</h3>
+                <div class="preco">R$ ${p.price.toFixed(2)}</div>
+                <button class="botao" onclick="addToCart('${p.name}', ${p.price})">Adicionar 🛒</button>
             </div>
+        </div>
         `;
     });
 }
 
-function addToCart(name, price){
+function addToCart(name, price) {
     cart.push({name, price});
     total += price;
     document.getElementById("total").innerText = total.toFixed(2);
 }
 
-function checkout(){
-    if(cart.length===0){
+function finalizar() {
+    if(cart.length === 0) {
         alert("Adicione pelo menos um item.");
         return;
     }
 
     let message = "Olá, gostaria de fazer o pedido:%0A%0A";
-    cart.forEach(item=>{
-        message += `- ${item.name} - R$ ${item.price.toFixed(2)}%0A`;
+
+    cart.forEach(item => {
+        message += `• ${item.name} - R$ ${item.price.toFixed(2)}%0A`;
     });
+
     message += `%0ATotal: R$ ${total.toFixed(2)}`;
 
-    window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
+    window.open(`https://wa.me/${phoneNumber}?text=${message}`);
 }
 
 renderMenu();
-
 </script>
 
 </body>
