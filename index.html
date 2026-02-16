@@ -1,162 +1,77 @@
-// =====================
-// CONFIGURAÇÃO WHATSAPP
-// =====================
-const phoneNumber = "555533303407";
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madre Mia</title>
 
-// =====================
-// PRODUTOS
-// =====================
-const products = [
-
-{name:"Papas de la Puta Madre", price:32, category:"piqueos"},
-{name:"A La Pucha", price:69, category:"piqueos"},
-{name:"Hermana Duda", price:32, category:"piqueos"},
-{name:"Uno Más", price:42, category:"piqueos"},
-{name:"Novas Diversões", price:42, category:"piqueos"},
-{name:"Parque de Colores", price:66, category:"piqueos"},
-{name:"Gracias Ignácio", price:38, category:"piqueos"},
-{name:"Contos y Fábulas", price:42, category:"piqueos"},
-
-{name:"Andale Gonzales", price:110, category:"combos"},
-{name:"Te Va Gustar", price:110, category:"combos"},
-
-{name:"Sobram Motivos", price:64, category:"especiais"},
-{name:"Sonhei com Você", price:68, category:"especiais"},
-{name:"Jambalaya", price:96, category:"especiais"},
-{name:"Regalos da Vida", price:75, category:"especiais"},
-{name:"Bateu Saudade", price:59, category:"especiais"},
-
-{name:"Ensalada de Tomates", price:15, category:"acomp"},
-{name:"Mix de Folhas", price:15, category:"acomp"},
-{name:"Tabule de Quinoa", price:15, category:"acomp"},
-{name:"Combo 3 Saladinhas", price:30, category:"acomp"},
-
-{name:"Churros del Chavo", price:24, category:"doces"},
-{name:"Nasce uma Lenda", price:32, category:"doces"},
-{name:"Y Morirme Contigo", price:24, category:"doces"},
-{name:"De las Guapas", price:18, category:"doces"},
-{name:"Pudim Leite Condensado", price:16, category:"doces"},
-{name:"Mousse de Chocolate", price:18, category:"doces"},
-{name:"Cheesecake Frutas Vermelhas", price:18, category:"doces"},
-{name:"Quindim Maracujá", price:19, category:"doces"},
-{name:"Torta de Limão", price:18, category:"doces"},
-{name:"Torta de Castanhas", price:21, category:"doces"},
-
-{name:"Aperol Spritz", price:40, category:"drinks"},
-{name:"Gin Tônica", price:30, category:"drinks"},
-{name:"Caipira", price:20, category:"drinks"},
-{name:"Cachaça Mineira", price:12, category:"drinks"},
-{name:"Tequila Prata/Ouro", price:16, category:"drinks"},
-{name:"Mojito", price:22, category:"drinks"},
-{name:"Negroni", price:33, category:"drinks"},
-{name:"Moscow Mule", price:25, category:"drinks"},
-{name:"La Muerte!", price:42, category:"drinks"},
-{name:"Sangre Latino Clássica 700ml", price:55, category:"drinks"},
-{name:"Sangre Latino Clássica 1200ml", price:75, category:"drinks"},
-{name:"Sangre Latino Blanca 700ml", price:55, category:"drinks"},
-{name:"Sangre Latino Blanca 1200ml", price:75, category:"drinks"},
-{name:"Combo 3 Copos 200ml", price:28, category:"drinks"},
-
-{name:"Pink Lemonade", price:14, category:"bebidas"},
-{name:"Ginger Ale", price:10, category:"bebidas"},
-{name:"Refrigerante", price:8, category:"bebidas"},
-{name:"Água", price:6, category:"bebidas"}
-
-];
-
-// =====================
-// CARRINHO
-// =====================
-let cart = [];
-let total = 0;
-
-function renderMenu(filter="all"){
-    const menu = document.getElementById("menu");
-    menu.innerHTML = "";
-
-    products
-    .filter(p => filter === "all" || p.category === filter)
-    .forEach(p => {
-        menu.innerHTML += `
-        <div class="menu-item">
-            <h3>${p.name}</h3>
-            <div class="price">R$ ${p.price.toFixed(2)}</div>
-            <button class="add-btn" onclick="addToCart('${p.name}', ${p.price})">
-                Adicionar
-            </button>
-        </div>`;
-    });
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #111;
+    color: white;
 }
 
-function filterMenu(category){
-    document.querySelectorAll(".filters button")
-        .forEach(btn => btn.classList.remove("active"));
-
-    event.target.classList.add("active");
-    renderMenu(category);
+header {
+    background: #e63946;
+    padding: 15px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
 }
 
-function addToCart(name, price){
-    cart.push({name, price});
-    total += price;
-    updateCart();
+.container {
+    padding: 15px;
 }
 
-function removeItem(index){
-    total -= cart[index].price;
-    cart.splice(index, 1);
-    updateCart();
+.product {
+    background: #1d1d1d;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
 }
 
-function updateCart(){
-    const cartItems = document.getElementById("cart-items");
-    cartItems.innerHTML = "";
-
-    cart.forEach((item, index) => {
-        cartItems.innerHTML += `
-        <div class="cart-item">
-            ${item.name} - R$ ${item.price.toFixed(2)}
-            <button class="remove-btn" onclick="removeItem(${index})">X</button>
-        </div>`;
-    });
-
-    document.getElementById("total").innerText = total.toFixed(2);
+button {
+    background: #e63946;
+    border: none;
+    padding: 8px 12px;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
-// =====================
-// FINALIZAÇÃO
-// =====================
-function checkout(){
-    if(cart.length === 0){
-        alert("Adicione pelo menos um item ao pedido.");
-        return;
-    }
-
-    let message = "Olá, gostaria de fazer o seguinte pedido:%0A%0A";
-
-    cart.forEach(item => {
-        message += `• ${item.name} - R$ ${item.price.toFixed(2)}%0A`;
-    
-   
-    });
-
-    message += `%0ATotal: R$ ${total.toFixed(2)}`;
-
-    window.location.href = `https://wa.me/${phoneNumber}?text=${message}`;
+button:hover {
+    opacity: 0.8;
 }
 
-// =====================
-// BOTÕES PRINCIPAIS
-// =====================
-function delivery(){
-    let message = "Olá, gostaria de fazer um pedido delivery.";
-    window.location.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+.cart {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #222;
+    padding: 10px;
+    border-top: 2px solid #e63946;
 }
 
-function reserva(){
-    let message = "Olá, gostaria de reservar uma mesa.";
-    window.location.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+.total {
+    font-weight: bold;
+    margin-top: 5px;
 }
+</style>
+</head>
 
-// Inicializa
-renderMenu();
+<body>
+
+<header>Madre Mia</header>
+
+<div class="container" id="menu"></div>
+
+<div class="cart">
+    <div id="cart-items"></div>
+    <div class="total">Total: R$ <span id="total">0.00</span></div>
+    <button onclick="checkout()">Finalizar Pedido</button>
+</div>
+
+<script
