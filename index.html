@@ -1,63 +1,87 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Madre Mia</title>
 
 <style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background: #111;
-    color: white;
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#fff;
 }
 
-header {
-    background: #e63946;
-    padding: 15px;
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
+header{
+    background:#e63946;
+    padding:20px;
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
 }
 
-.container {
-    padding: 15px;
+.filters{
+    display:flex;
+    overflow:auto;
+    padding:10px;
+    gap:8px;
 }
 
-.product {
-    background: #1d1d1d;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 8px;
+.filters button{
+    background:#222;
+    color:#fff;
+    border:none;
+    padding:8px 14px;
+    border-radius:20px;
+    cursor:pointer;
 }
 
-button {
-    background: #e63946;
-    border: none;
-    padding: 8px 12px;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
+.filters button.active{
+    background:#e63946;
 }
 
-button:hover {
-    opacity: 0.8;
+#menu{
+    padding:15px;
 }
 
-.cart {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #222;
-    padding: 10px;
-    border-top: 2px solid #e63946;
+.product{
+    background:#111;
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
-.total {
-    font-weight: bold;
-    margin-top: 5px;
+.product button{
+    background:#e63946;
+    border:none;
+    padding:6px 10px;
+    color:#fff;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+footer{
+    position:fixed;
+    bottom:0;
+    width:100%;
+    background:#111;
+    border-top:2px solid #e63946;
+    padding:15px;
+}
+
+.checkout-btn{
+    background:#e63946;
+    border:none;
+    padding:10px;
+    width:100%;
+    color:#fff;
+    border-radius:8px;
+    margin-top:8px;
+    cursor:pointer;
 }
 </style>
 </head>
@@ -66,12 +90,106 @@ button:hover {
 
 <header>Madre Mia</header>
 
-<div class="container" id="menu"></div>
-
-<div class="cart">
-    <div id="cart-items"></div>
-    <div class="total">Total: R$ <span id="total">0.00</span></div>
-    <button onclick="checkout()">Finalizar Pedido</button>
+<div class="filters">
+    <button onclick="filterMenu('all')" class="active">Todos</button>
+    <button onclick="filterMenu('piques')">Piques</button>
+    <button onclick="filterMenu('combos')">Combos</button>
+    <button onclick="filterMenu('doces')">Doces</button>
+    <button onclick="filterMenu('drinks')">Drinks</button>
 </div>
 
-<script
+<div id="menu"></div>
+
+<footer>
+    <div>Total: R$ <span id="total">0.00</span></div>
+    <button class="checkout-btn" onclick="checkout()">Finalizar Pedido</button>
+</footer>
+
+<script>
+
+// CONFIGURAÇÃO WHATSAPP
+const phoneNumber = "555533303407";
+
+// PRODUTOS
+const products = [
+{name:"Papas de la Puta Madre", price:32, category:"piques"},
+{name:"A La Pucha", price:69, category:"piques"},
+{name:"Hermana Duda", price:32, category:"piques"},
+{name:"Combo Especial", price:110, category:"combos"},
+{name:"Churros", price:24, category:"doces"},
+{name:"Torta de Limão", price:18, category:"doces"},
+{name:"Mojito", price:22, category:"drinks"},
+{name:"Caipira", price:20, category:"drinks"}
+];
+
+let cart = [];
+let total = 0;
+
+// RENDER MENU
+function renderMenu(filter="all"){
+    const menu = document.getElementById("menu");
+    menu.innerHTML = "";
+
+    products
+    .filter(p => filter==="all" || p.category===filter)
+    .forEach(p=>{
+        menu.innerHTML += `
+            <div class="product">
+                <div>
+                    <div>${p.name}</div>
+                    <div>R$ ${p.price.toFixed(2)}</div>
+                </div>
+                <button onclick="addToCart('${p.name}', ${p.price})">
+                    Adicionar
+                </button>
+            </div>
+        `;
+    });
+}
+
+// FILTRO
+function filterMenu(category){
+    document.querySelectorAll(".filters button")
+    .forEach(btn => btn.classList.remove("active"));
+
+    event.target.classList.add("active");
+
+    renderMenu(category);
+}
+
+// CARRINHO
+function addToCart(name, price){
+    cart.push({name, price});
+    total += price;
+    updateTotal();
+}
+
+function updateTotal(){
+    document.getElementById("total").innerText = total.toFixed(2);
+}
+
+// CHECKOUT WHATSAPP
+function checkout(){
+    if(cart.length===0){
+        alert("Adicione pelo menos um item.");
+        return;
+    }
+
+    let message = "Olá, gostaria de fazer o pedido:%0A%0A";
+
+    cart.forEach(item=>{
+        message += `- ${item.name} - R$ ${item.price.toFixed(2)}%0A`;
+    });
+
+    message += `%0ATotal: R$ ${total.toFixed(2)}`;
+
+    window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
+}
+
+// 🔥 IMPORTANTE: renderiza ao carregar
+renderMenu("all");
+
+</script>
+
+</body>
+</html>
