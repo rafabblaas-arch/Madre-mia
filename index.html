@@ -13,6 +13,7 @@ margin:0;
 padding:0;
 box-sizing:border-box;
 font-family:Segoe UI, sans-serif;
+scroll-behavior:smooth;
 }
 
 body{
@@ -24,25 +25,52 @@ padding-bottom:120px;
 /* HEADER */
 header{
 text-align:center;
-padding:25px 10px;
-background:#111;
+padding:25px 10px 10px 10px;
 font-size:28px;
 font-weight:bold;
-letter-spacing:1px;
 }
 
 .delivery-time{
 text-align:center;
-margin:10px;
-font-size:16px;
+margin-bottom:15px;
 color:#ff4d4d;
 }
 
-/* CARD PRODUTO */
+/* CATEGORIAS */
+.categories{
+display:flex;
+overflow-x:auto;
+gap:10px;
+padding:10px;
+}
+
+.categories button{
+background:#1b1b1b;
+color:#fff;
+border:none;
+padding:10px 18px;
+border-radius:20px;
+cursor:pointer;
+white-space:nowrap;
+transition:0.2s;
+}
+
+.categories button:hover{
+background:#ff0000;
+}
+
+/* TITULO CATEGORIA */
+.section-title{
+margin:25px 20px 10px;
+font-size:20px;
+color:#ff4d4d;
+}
+
+/* CARD */
 .card{
 background:#1b1b1b;
 border-radius:18px;
-margin:20px;
+margin:15px 20px;
 overflow:hidden;
 box-shadow:0 10px 25px rgba(0,0,0,0.6);
 transition:0.2s;
@@ -54,7 +82,7 @@ transform:scale(1.02);
 
 .card img{
 width:100%;
-height:220px;
+height:200px;
 object-fit:cover;
 }
 
@@ -69,7 +97,7 @@ color:#ff4d4d;
 margin:10px 0;
 }
 
-button{
+button.add{
 width:100%;
 padding:14px;
 border:none;
@@ -113,31 +141,53 @@ cursor:pointer;
 <header>Madre Mia</header>
 <div class="delivery-time">⏱ Entrega estimada: 35–50 minutos</div>
 
+<div class="categories">
+<button onclick="scrollToSection('lanches')">Lanches</button>
+<button onclick="scrollToSection('especiais')">Especiais</button>
+<button onclick="scrollToSection('doces')">Doces</button>
+<button onclick="scrollToSection('drinks')">Drinks</button>
+</div>
+
+<div id="lanches">
+<div class="section-title">Lanches</div>
+
 <div class="card">
 <img src="https://picsum.photos/500/300?1">
 <div class="card-content">
 <h2>Papas de la Puta Madre</h2>
 <div class="price">R$ 32.00</div>
-<button onclick="addToCart(32)">Adicionar 🛒</button>
+<button class="add" onclick="addToCart(32)">Adicionar 🛒</button>
 </div>
 </div>
+
+</div>
+
+<div id="especiais">
+<div class="section-title">Especiais</div>
 
 <div class="card">
 <img src="https://picsum.photos/500/300?2">
 <div class="card-content">
 <h2>Jambalaya</h2>
 <div class="price">R$ 96.00</div>
-<button onclick="addToCart(96)">Adicionar 🛒</button>
+<button class="add" onclick="addToCart(96)">Adicionar 🛒</button>
 </div>
 </div>
+
+</div>
+
+<div id="doces">
+<div class="section-title">Doces</div>
 
 <div class="card">
 <img src="https://picsum.photos/500/300?3">
 <div class="card-content">
 <h2>Churros</h2>
 <div class="price">R$ 24.00</div>
-<button onclick="addToCart(24)">Adicionar 🛒</button>
+<button class="add" onclick="addToCart(24)">Adicionar 🛒</button>
 </div>
+</div>
+
 </div>
 
 <div class="cart-bar">
@@ -146,12 +196,18 @@ cursor:pointer;
 </div>
 
 <script>
+
 let total = 0;
 
 function addToCart(price){
 total += price;
 document.getElementById("total").innerText = total.toFixed(2);
 }
+
+function scrollToSection(id){
+document.getElementById(id).scrollIntoView();
+}
+
 </script>
 
 </body>
